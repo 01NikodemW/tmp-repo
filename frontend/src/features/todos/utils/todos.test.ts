@@ -33,7 +33,7 @@ describe('selectTodos', () => {
 })
 
 describe('validateTodo', () => {
-  const input = { title: 'Plan', description: '', priority: 'medium' as const, due_date: '' }
+  const input = { title: 'Plan', description: '', priority: 'medium' as const, completed: false, due_date: '' }
 
   it('rejects a title containing a line break', () => {
     expect(validateTodo({ ...input, title: 'Plan\nsprint' }).title).toBe(
