@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { selectTodos } from './todos'
+import { selectTodos, validateTodo } from './todos'
 import type { Todo } from '../types'
 
 const base: Todo = {
@@ -29,5 +29,22 @@ describe('selectTodos', () => {
     const todos = [base, high]
     expect(selectTodos(todos, 'all', '', 'priority')).toEqual([high, base])
     expect(todos).toEqual([base, high])
+  })
+})
+
+describe('validateTodo', () => {
+  const input = { title: 'Plan', description: '', priority: 'medium' as const, due_date: '' }
+
+  it('rejects a title containing a line break', () => {
+    expect(validateTodo({ ...input, title: 'Plan\nsprint' }).title).toBe(
+      'The task title must be a single line.',
+    )
+    expect(validateTodo({ ...input, title: 'Plan\r\nsprint' }).title).toBe(
+      'The task title must be a single line.',
+    )
+  })
+
+  it('ignores surrounding line breaks in a single-line title', () => {
+    expect(validateTodo({ ...input, title: '\n Plan \n' }).title).toBeUndefined()
   })
 })
