@@ -37,12 +37,11 @@ tools:
     - "git rev-parse *"
     - "git merge-base *"
     - "git ls-files *"
-    - "npm --prefix frontend ci"
-    - "npm --prefix frontend test *"
-    - "npm --prefix frontend run *"
-    - "python -m pip install -r backend/requirements.txt"
-    - "python -m pytest *"
-    - "pytest *"
+    # Copilot CLI matches command identifiers, not shell-style globs.
+    # Grant the runtimes needed for dependency installation and test execution.
+    - "npm:*"
+    - "python:*"
+    - "pytest:*"
 runtimes:
   node:
     version: "22"
