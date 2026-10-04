@@ -21,7 +21,7 @@ tools:
     - "git diff *"
     - "git show *"
     - "git ls-files *"
-    - "npm --prefix frontend ci --ignore-scripts"
+    - "npm --prefix frontend ci"
     - "npm --prefix frontend test *"
     - "npm --prefix frontend run *"
     - "python -m pip install -r backend/requirements.txt"
@@ -62,8 +62,7 @@ React/TypeScript and Python/FastAPI source files with testable behavior.
 For each relevant file, decide whether a test is needed, create or update only
 matching test files, and run the focused tests. If dependencies are missing,
 install only the declared project dependencies inside the agent sandbox.
-For npm use `npm --prefix frontend ci --ignore-scripts`. Do not run package
-lifecycle scripts. For Python install only `backend/requirements.txt`.
+For npm use `npm --prefix frontend ci`. For Python install only `backend/requirements.txt`.
 Never read or expose secrets. Do not change production code or project configuration.
 
 When tests pass, commit only the changed test files on this PR's head branch and

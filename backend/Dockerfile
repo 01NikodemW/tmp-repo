@@ -1,10 +1,9 @@
 FROM python:3.12-slim
 WORKDIR /app
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DATABASE_PATH=/app/data/todos.db
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt \
-    && useradd --create-home appuser \
-    && mkdir -p /app/data && chown appuser:appuser /app/data
+    && useradd --create-home appuser
 COPY app ./app
 USER appuser
 EXPOSE 8000
