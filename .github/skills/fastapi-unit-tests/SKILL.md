@@ -31,3 +31,17 @@ description: Use when creating or updating pytest unit tests for changed Python 
 Run targeted pytest for each changed test file. Inspect failures, correct generated tests,
 and rerun. If a failure reveals a production defect, report it without editing production
 code. State clearly when the test environment prevents verification.
+
+## Repository commands and mocks
+
+All commands below run from the repository root and require no PostgreSQL service.
+
+- Install: `python -m pip install -r backend/requirements.txt`.
+- Focused: `python -m pytest -c backend/pyproject.toml backend/tests/PATH/test_MODULE.py`.
+- Final: `python -m pytest -c backend/pyproject.toml backend/tests`.
+- Coverage: `python -m pytest -c backend/pyproject.toml backend/tests --cov=backend/app --cov-config=backend/pyproject.toml --cov-report=term-missing --cov-report=json:backend/coverage/coverage.json`.
+- Reuse `tests.mocks.make_repository_mock` and fixtures from `tests/conftest.py`.
+  Mock SQLAlchemy sessions at their boundary; do not introduce SQLite or connect
+  to a real database. Mock `.env` loading before testing database configuration.
+- Mount only the relevant router unless testing factory/lifespan composition;
+  use a test-owned FastAPI app and clear dependency overrides after the test.

@@ -3,14 +3,28 @@ name: Copilot Unit Test Agent
 description: Maintain React and FastAPI unit tests for pull request changes.
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Analyze PR changes or backfill existing missing coverage
+        type: choice
+        options: [pr, coverage]
+        default: pr
+concurrency:
+  job-discriminator: "${{ github.run_id }}"
 engine:
   id: copilot
   agent: unit-test-agent
 permissions:
   contents: read
   pull-requests: read
-  copilot-requests: write
+  copilot-requests: none
+skills:
+  - .github/skills/pr-test-analysis
+  - .github/skills/coverage-backfill
+  - .github/skills/react-unit-tests
+  - .github/skills/fastapi-unit-tests
 checkout:
   fetch-depth: 0
 tools:
@@ -20,6 +34,8 @@ tools:
     - "git status *"
     - "git diff *"
     - "git show *"
+    - "git rev-parse *"
+    - "git merge-base *"
     - "git ls-files *"
     - "npm --prefix frontend ci"
     - "npm --prefix frontend test *"
@@ -39,12 +55,11 @@ safe-outputs:
     max: 1
     max-patch-size: 256
     allowed-files:
-      - "**/*.test.ts"
-      - "**/*.test.tsx"
-      - "**/*.spec.ts"
-      - "**/*.spec.tsx"
-      - "**/test_*.py"
-      - "test_*.py"
+      - "frontend/src/**/*.test.ts"
+      - "frontend/src/**/*.test.tsx"
+      - "frontend/src/**/*.spec.ts"
+      - "frontend/src/**/*.spec.tsx"
+      - "backend/tests/**/test_*.py"
     github-token-for-extra-empty-commit: none
   add-comment:
     max: 1
@@ -55,21 +70,42 @@ timeout-minutes: 20
 
 # Unit tests for this pull request
 
-Use the `unit-test-agent` custom agent and its React and FastAPI skills.
-Analyze the changes in this PR against its base branch. Only work on changed
-React/TypeScript and Python/FastAPI source files with testable behavior.
+Use the `unit-test-agent` custom agent. Read `pr-test-analysis` first, then the
+React and/or FastAPI skills for the relevant stack. They are explicitly installed
+through `skills:`. Always record the skills actually used in the final report.
 
-For each relevant file, decide whether a test is needed, create or update only
-matching test files, and run the focused tests. If dependencies are missing,
-install only the declared project dependencies inside the agent sandbox.
-For npm use `npm --prefix frontend ci`. For Python install only `backend/requirements.txt`.
-Never read or expose secrets. Do not change production code or project configuration.
+Mode: `${{ github.event.inputs.mode || 'pr' }}`.
+For `pr`, analyze only testable behavior changed relative to the PR base SHA.
+For `coverage`, also read `coverage-backfill` and fill a bounded batch of existing
+coverage gaps in the triggering PR. Manual runs MUST provide a PR context via
+`aw_context` with `item_type: pull_request` and `item_number`. Without an open,
+same-repository PR, do not edit or publish anything; report missing context.
 
-When tests pass, commit only the changed test files on this PR's head branch and
-use the `push-to-pull-request-branch` safe output to publish them. Do not push
-if any generated test is unverified or failing. The safe output allows only
-test-file paths; do not attempt to bypass that restriction.
+Read base/head SHAs from the PR context or GitHub read tools, verify the checked-out
+head, and inspect the three-dot diff. Ignore test-only changes from earlier agent
+runs: if no behavioral gap remains, only report why no new tests are needed.
 
-Add one concise PR comment stating which tests were created or updated, which
-source changes were skipped and why, the exact test commands and results, and
-any unresolved failures. If no tests are needed, only post the comment.
+Install only the declared project dependencies inside the sandbox:
+`npm --prefix frontend ci` and
+`python -m pip install -r backend/requirements.txt`.
+Never read/expose secrets or change production code, dependencies or configuration.
+
+Run the relevant baseline before editing. Verify each changed test file and then
+run the entire affected stack:
+
+- Frontend: `npm --prefix frontend test`, `npm --prefix frontend run typecheck`.
+- Backend: `python -m pytest -c backend/pyproject.toml backend/tests`.
+
+A failed baseline, failing test, failed typecheck or unavailable dependency means
+no publication of test changes. Report failures honestly, including commands and
+exit status. Repair generated tests at most twice; never modify application code.
+
+When verification passes, inspect the diff, stage only explicit test paths and
+commit them on the checked-out PR head. Invoke `push-to-pull-request-branch` for
+this triggering PR only. The safe output restricts allowed paths to tests.
+Do not directly push, force push, merge, or create another PR.
+
+Use `add-comment` once to report mode, base/head revisions, decisions per file,
+created/updated tests, skipped changes and reasons, skills used, exact commands,
+counts/results, and unresolved failures. Include the Actions run URL. If tests
+are unnecessary or verification is blocked, publish only the report.
