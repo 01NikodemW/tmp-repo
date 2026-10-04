@@ -3,6 +3,8 @@ from enum import Enum
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from .validators import validate_patch_fields
+
 
 class Priority(str, Enum):
     low = "low"
@@ -31,12 +33,7 @@ class TodoUpdate(BaseModel):
 
     @model_validator(mode="after")
     def validate_patch(self):
-        if not self.model_fields_set:
-            raise ValueError("Provide at least one field to update.")
-        for field in self.model_fields_set - {"due_date"}:
-            if getattr(self, field) is None:
-                raise ValueError(f"Field {field} cannot be null.")
-        return self
+        return validate_patch_fields(self)
 
 
 class Todo(TodoCreate):

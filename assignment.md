@@ -12,7 +12,10 @@ W projekcie znajdują się zarówno fragmenty posiadające testy jednostkowe, ja
 
 ## Zadanie
 
-Twoim zadaniem jest przygotowanie **agentowego workflow**, którego celem jest wspieranie procesu tworzenia testów jednostkowych. Rozwiązanie powinno wykorzystywać **custom agenta oraz reużywalne skille**, uruchamiane w wybranym środowisku agentowym.
+Celem zadania jest stworzenie **custom agenta wraz z reużywalnymi skillami**, uruchamianymi w wybranym środowisku agentowym, oraz wykorzystanie ich do:
+
+- uzupełnienia brakujących testów jednostkowych i pokrycia kodu w istniejącej aplikacji — zarówno na frontendzie, jak i backendzie,
+- stworzenia **automatycznego workflow dla Pull Requestów**, który wspiera tworzenie i aktualizowanie testów dla zmienionego kodu.
 
 Agent powinien analizować zmiany wprowadzane w ramach Pull Requesta i, jeśli uzna to za zasadne, **tworzyć lub aktualizować testy jednostkowe dla zmienionego kodu**.
 

@@ -34,3 +34,15 @@ Run the repository's targeted test command for the changed test file. If availab
 run its TypeScript check when new tests introduce typing risk. On failure, inspect the
 assertion or setup, fix the test, and rerun it. Report any production behavior that remains
 inconsistent instead of editing production code.
+
+## Repository commands and mocks
+
+- Install: `npm --prefix frontend ci`.
+- Focused: `npm --prefix frontend test -- src/PATH.test.tsx` (or `.test.ts`).
+- Final: `npm --prefix frontend test` and `npm --prefix frontend run typecheck`.
+- Coverage: `npm --prefix frontend run test:coverage`.
+- In application component tests use the shared design-system mocks:
+  `vi.mock('RELATIVE/design-system', () => import('RELATIVE/design-system/mocks'))`.
+  Match the source import path; do not duplicate component mock implementations.
+- Use real React Query clients with retries disabled when testing cache behavior;
+  mock HTTP/API boundaries and clear each client after the test.
