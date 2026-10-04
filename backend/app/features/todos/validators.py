@@ -5,6 +5,13 @@ from pydantic import BaseModel
 Model = TypeVar("Model", bound=BaseModel)
 
 
+def validate_title(value: str | None) -> str | None:
+    """Keep task titles on a single line; descriptions may contain newlines."""
+    if value is not None and ("\n" in value or "\r" in value):
+        raise ValueError("The task title must be a single line.")
+    return value
+
+
 def validate_patch_fields(model: Model) -> Model:
     """Require a non-empty patch and allow explicit null only for the due date."""
     if not model.model_fields_set:

@@ -1,9 +1,10 @@
 from datetime import date, datetime
 from enum import Enum
+from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, model_validator
 
-from .validators import validate_patch_fields
+from .validators import validate_patch_fields, validate_title
 
 
 class Priority(str, Enum):
@@ -15,7 +16,7 @@ class Priority(str, Enum):
 class TodoCreate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
-    title: str = Field(min_length=1, max_length=120)
+    title: Annotated[str, AfterValidator(validate_title)] = Field(min_length=1, max_length=120)
     description: str = Field(default="", max_length=2000)
     priority: Priority = Priority.medium
     due_date: date | None = None
@@ -25,7 +26,7 @@ class TodoCreate(BaseModel):
 class TodoUpdate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
-    title: str | None = Field(default=None, min_length=1, max_length=120)
+    title: Annotated[str | None, AfterValidator(validate_title)] = Field(default=None, min_length=1, max_length=120)
     description: str | None = Field(default=None, max_length=2000)
     priority: Priority | None = None
     due_date: date | None = None

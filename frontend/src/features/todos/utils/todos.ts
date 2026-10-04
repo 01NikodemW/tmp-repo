@@ -8,6 +8,8 @@ export function validateTodo(input: TodoInput): Record<string, string> {
   if (!input.title.trim()) errors.title = 'Enter a task title.'
   else if (input.title.trim().length > 120)
     errors.title = 'The title must be at most 120 characters.'
+  else if (/[\r\n]/.test(input.title.trim()))
+    errors.title = 'The task title must be a single line.'
   if (input.description.trim().length > 2000)
     errors.description = 'The description must be at most 2000 characters.'
   if (input.due_date) {
