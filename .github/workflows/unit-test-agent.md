@@ -36,7 +36,8 @@ pre-agent-steps:
       node <<'NODE'
       const fs = require('node:fs');
       const path = require('node:path');
-      const file = path.join(process.env.RUNNER_TEMP, 'gh-aw/actions/safe_outputs_handlers.cjs');
+      // The MCP container uses the separate safeoutputs copy created by setup.
+      const file = path.join(process.env.RUNNER_TEMP, 'gh-aw/safeoutputs/safe_outputs_handlers.cjs');
       const source = fs.readFileSync(file, 'utf8');
       const before = '`origin/${baseBranch}..${pushPinnedSha}`, "--"';
       const after = '`${prHeadBaseline?.sha || `origin/${baseBranch}`}..${pushPinnedSha}`, "--"';
