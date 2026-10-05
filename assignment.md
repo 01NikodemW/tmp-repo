@@ -1,45 +1,51 @@
-# Zadanie rekrutacyjne — AI Unit Test Agent
+# Recruitment Assignment - Unit Test Agent and Agentic Workflow
 
-## Kontekst
+## Context
 
-Otrzymujesz repozytorium przykładowej aplikacji full-stack składającej się z:
+You are provided with a repository containing a sample full-stack application built with:
 
-- **Frontendu:** React + TypeScript
-- **Backendu:** Python + FastAPI
+- **Frontend:** React + TypeScript
+- **Backend:** Python + FastAPI
 - **Source control:** Git / GitHub
 
-W projekcie znajdują się zarówno fragmenty posiadające testy jednostkowe, jak i kod, dla którego testy nie zostały jeszcze przygotowane.
+The project contains both code that already has unit tests and code for which unit tests have not yet been written.
 
-## Zadanie
+**Before starting the assignment, create your own repository on GitHub and add the code from the base repository as your starting point.** The base repository is provided solely to share the application code — do not modify it or open pull requests against it.
 
-Celem zadania jest stworzenie **custom agenta wraz z reużywalnymi skillami**, uruchamianymi w wybranym środowisku agentowym, oraz wykorzystanie ich do:
+Complete the entire assignment in your own repository. Once finished, send us a link to it.
 
-- uzupełnienia brakujących testów jednostkowych i pokrycia kodu w istniejącej aplikacji — zarówno na frontendzie, jak i backendzie,
-- stworzenia **automatycznego workflow dla Pull Requestów**, który wspiera tworzenie i aktualizowanie testów dla zmienionego kodu.
+## Task
 
-Agent powinien analizować zmiany wprowadzane w ramach Pull Requesta i, jeśli uzna to za zasadne, **tworzyć lub aktualizować testy jednostkowe dla zmienionego kodu**.
+The goal is to build a **custom agent with reusable skills**, running in an agent environment of your choice, and use them to:
 
-Rozwiązanie powinno:
+- add missing unit tests and improve code coverage in the existing application, across both the frontend and backend,
+- create an **automated workflow for pull requests** that supports creating and updating tests for changed code.
 
-- obsługiwać zarówno frontend, jak i backend,
-- działać automatycznie dla Pull Requestów,
-- weryfikować poprawność przygotowanych testów poprzez ich uruchomienie,
-- udostępniać rezultat działania w kontekście Pull Requesta.
+The agent should analyze the changes introduced in a pull request and, when it determines this is appropriate, **create or update unit tests for the changed code**.
 
-## Oczekiwany sposób realizacji
+The solution should:
 
-Rozwiązanie powinno obejmować **agentowy workflow, custom agenta oraz reużywalne skille** wykorzystywane w jego działaniu.
+- support both the frontend and backend,
+- run automatically for pull requests,
+- verify the generated or updated tests by running them,
+- make the results available in the context of the pull request.
 
-Wybór narzędzi, platformy, architektury i organizacji projektu pozostaje **do Twojej decyzji**.
+## Expected Implementation
 
-## Dokumentacja
+The solution should include an **agentic workflow, a custom agent, and reusable skills** used during execution.
 
-Do rozwiązania dołącz krótki plik `SOLUTION.md`, w którym opisz:
+**The solution must be implemented on GitHub:** the repository, pull requests, and automated PR workflow must operate on GitHub, and the agent's results must be available in the context of the relevant GitHub pull request. The choice of agent environment, other tools, architecture, and project structure is **up to you**.
 
-- najważniejsze decyzje techniczne i ich uzasadnienie,
-- jak uruchomić workflow dla PR i jakie wymagania trzeba wcześniej spełnić,
-- gdzie zdefiniowano custom agenta i skille oraz jak są wykorzystywane podczas wykonania,
-- przykład działania z informacją o decyzjach agenta, użytych skillach i wynikach uruchomienia testów,
-- przyjęte założenia,
-- ograniczenia rozwiązania,
-- elementy, które rozwinąłbyś lub zmienił w wersji produkcyjnej.
+**An additional advantage would be to create an example pull request that adds a new feature and demonstrate the agentic workflow on that PR** — from analyzing the changes, through creating or updating tests and running them, to sharing the results in the context of the pull request.
+
+## Documentation
+
+Include a short `SOLUTION.md` file describing:
+
+- the main technical decisions and their rationale,
+- how to run the PR workflow and which prerequisites must be met,
+- where the custom agent and skills are defined and how they are used during execution,
+- an example run, including the agent's decisions, the skills used, and the test execution results,
+- your assumptions,
+- the solution's limitations,
+- what you would extend or change for a production version.
