@@ -6,6 +6,8 @@ Wybrałem GitHub Copilot CLI uruchamiany przez GitHub Agentic Workflows (`gh-aw`
 
 Agent pracuje w sandboxie z ograniczonym dostępem do sieci i uprawnieniami odczytu. Oddzielny mechanizm safe outputs publikuje wyłącznie pliki testowe na gałęzi PR i komentarz z raportem. Kod aplikacji, konfiguracja i zależności pozostają poza zakresem zmian agenta. Testy korzystają ze wspólnych mocków design-systemu oraz mocków bazy, więc PostgreSQL i Docker nie są wymagane.
 
+W gh-aw v0.89.21 walidator MCP `allowed-files` błędnie obejmuje również wcześniejsze commity autora PR. Krok `pre-agent-steps` poprawia wyłącznie zakres tej kontroli na zapisany przez framework SHA head PR → commit agenta, w kopii `gh-aw/safeoutputs/safe_outputs_handlers.cjs` uruchamianej przez kontener MCP (nie w oddzielnej kopii `actions`). Lista dozwolonych testów i kontrola patcha przy publikacji pozostają aktywne. Poprawka wymaga dokładnie jednego dopasowania w przypiętej wersji skryptu; zmiana implementacji przerywa uruchomienie i wymaga przeglądu. Po poprawieniu tego zachowania w gh-aw należy usunąć obejście.
+
 ## Pliki i przebieg
 
 | Element | Definicja i zastosowanie |

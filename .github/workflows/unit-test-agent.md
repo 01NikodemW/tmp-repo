@@ -27,6 +27,25 @@ skills:
   - .github/skills/fastapi-unit-tests
 checkout:
   fetch-depth: 0
+pre-agent-steps:
+  # gh-aw v0.89.21 checks the whole PR history against allowed-files.
+  # Restrict that check to agent commits using the framework's recorded PR head.
+  # Keep the original restrictive behavior when no matching baseline exists.
+  - name: Scope file-policy validation to agent commits
+    run: |
+      node <<'NODE'
+      const fs = require('node:fs');
+      const path = require('node:path');
+      // The MCP container uses the separate safeoutputs copy created by setup.
+      const file = path.join(process.env.RUNNER_TEMP, 'gh-aw/safeoutputs/safe_outputs_handlers.cjs');
+      const source = fs.readFileSync(file, 'utf8');
+      const before = '`origin/${baseBranch}..${pushPinnedSha}`, "--"';
+      const after = '`${prHeadBaseline?.sha || `origin/${baseBranch}`}..${pushPinnedSha}`, "--"';
+      if (source.split(before).length !== 2) {
+        throw new Error('gh-aw policy implementation changed; review the pinned-version workaround');
+      }
+      fs.writeFileSync(file, source.replace(before, after));
+      NODE
 tools:
   edit:
   bash:
@@ -37,12 +56,11 @@ tools:
     - "git rev-parse *"
     - "git merge-base *"
     - "git ls-files *"
-    - "npm --prefix frontend ci"
-    - "npm --prefix frontend test *"
-    - "npm --prefix frontend run *"
-    - "python -m pip install -r backend/requirements.txt"
-    - "python -m pytest *"
-    - "pytest *"
+    # Copilot CLI matches command identifiers, not shell-style globs.
+    # Grant the runtimes needed for dependency installation and test execution.
+    - "npm:*"
+    - "python:*"
+    - "pytest:*"
 runtimes:
   node:
     version: "22"
@@ -109,3 +127,6 @@ Use `add-comment` once to report mode, base/head revisions, decisions per file,
 created/updated tests, skipped changes and reasons, skills used, exact commands,
 counts/results, and unresolved failures. Include the Actions run URL. If tests
 are unnecessary or verification is blocked, publish only the report.
+If the push tool returns an error, explicitly report that the tests were NOT
+published. A successful safe-output response only queues publication; describe
+it as queued until the safe-outputs job confirms the remote commit.

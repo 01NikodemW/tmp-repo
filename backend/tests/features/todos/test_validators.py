@@ -3,8 +3,8 @@ from datetime import date
 import pytest
 from pydantic import ValidationError
 
-from app.features.todos.schemas import TodoUpdate
-from app.features.todos.validators import validate_patch_fields
+from app.features.todos.schemas import TodoCreate, TodoUpdate
+from app.features.todos.validators import validate_patch_fields, validate_title
 
 
 def test_rejects_an_empty_patch():
@@ -34,3 +34,23 @@ def test_preserves_every_non_null_patch_field():
         "title": "Renamed task", "description": "Details", "priority": "low",
         "completed": False, "due_date": date(2026, 10, 15),
     }
+
+
+@pytest.mark.parametrize("title", ["Line\none", "Line\rone", "Line\r\none"])
+@pytest.mark.parametrize("model, kwargs", [(TodoCreate, {}), (TodoUpdate, {})])
+def test_rejects_multiline_titles_in_create_and_update(model, kwargs, title):
+    with pytest.raises(ValidationError, match="must be a single line"):
+        model(title=title, **kwargs)
+
+
+def test_trims_surrounding_newlines_before_checking_title():
+    assert TodoCreate(title="\n Plan \n").title == "Plan"
+
+
+def test_allows_newlines_in_description():
+    assert TodoCreate(title="Plan", description="a\nb").description == "a\nb"
+
+
+def test_validate_title_passes_through_none_and_single_line():
+    assert validate_title(None) is None
+    assert validate_title("Plan") == "Plan"
