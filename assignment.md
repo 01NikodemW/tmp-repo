@@ -10,7 +10,7 @@ You are provided with a repository containing a sample full-stack application bu
 
 The project contains both code that already has unit tests and code for which unit tests have not yet been written.
 
-**Before starting the assignment, create your own repository on GitHub and add the code from the base repository as your starting point.** The base repository is provided solely to share the application code — do not modify it or open pull requests against it.
+**Before starting the assignment, create your own repository on GitHub and add the code from the base repository as your starting point.**
 
 Complete the entire assignment in your own repository. Once finished, send us a link to it.
 
