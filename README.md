@@ -1,6 +1,6 @@
-# Taskly
+# Taskly App
 
-## Przygotowanie
+## Setup
 
 ```sh
 cp .env.example .env
@@ -12,7 +12,7 @@ cp .env.example .env
 docker compose up --build -d --wait
 ```
 
-Aplikacja: http://localhost:8080. API: http://localhost:8000/docs.
+Application: http://localhost:8080. API: http://localhost:8000/docs.
 
 ```sh
 docker compose down
@@ -20,14 +20,14 @@ docker compose down
 
 ## Frontend
 
-Instalacja:
+Installation:
 
 ```sh
 cd frontend
 npm ci
 ```
 
-Dev — http://localhost:5173:
+Development — http://localhost:5173:
 
 ```sh
 npm run dev
@@ -39,7 +39,7 @@ Storybook — http://localhost:6006:
 npm run storybook
 ```
 
-Testy:
+Tests:
 
 ```sh
 npm test
@@ -53,7 +53,7 @@ npm run test:coverage
 
 ## Backend
 
-Instalacja (z katalogu repozytorium):
+Installation (from the repository root):
 
 ```sh
 python3 -m venv backend/.venv
@@ -61,7 +61,7 @@ source backend/.venv/bin/activate
 python -m pip install -r backend/requirements.txt
 ```
 
-Dev — http://localhost:8000/docs:
+Development — http://localhost:8000/docs:
 
 ```sh
 docker compose up -d --wait postgres
@@ -69,7 +69,7 @@ cd backend
 python -m uvicorn app.main:app --reload
 ```
 
-Testy (w `backend`, z aktywnym `.venv`):
+Tests (in `backend`, with `.venv` activated):
 
 ```sh
 python -m pytest
