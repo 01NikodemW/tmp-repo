@@ -38,6 +38,10 @@ The solution should include an **agentic workflow, a custom agent, and reusable 
 
 **An additional advantage would be to create an example pull request that adds a new feature and demonstrate the agentic workflow on that PR** — from analyzing the changes, through creating or updating tests and running them, to sharing the results in the context of the pull request.
 
+## Evaluation Criteria
+
+**The greatest weight in the evaluation goes to the custom agent, reusable skills, and agentic workflow, and to how well the solution follows best practices for security, reliability, and producing correct, useful results.**
+
 ## Documentation
 
 Include a short `SOLUTION.md` file describing:
