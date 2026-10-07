@@ -2,7 +2,7 @@
 
 ## Context
 
-You are provided with a repository containing a sample full-stack application built with:
+The base repository, [https://github.com/cloudfidecareers/taskly-app](https://github.com/cloudfidecareers/taskly-app), contains a sample full-stack application built with:
 
 - **Frontend:** React + TypeScript
 - **Backend:** Python + FastAPI
@@ -10,9 +10,9 @@ You are provided with a repository containing a sample full-stack application bu
 
 The project contains both code that already has unit tests and code for which unit tests have not yet been written.
 
-**Before starting the assignment, create your own repository on GitHub and add the code from the base repository as your starting point.**
+**Before starting the assignment, create your own public repository on GitHub and add the code from the base repository as your starting point. Do not include the assignment instructions you received in your repository.**
 
-Complete the entire assignment in your own repository. Once finished, send us a link to it.
+Complete the entire assignment in your own repository. **You have a maximum of 3 days from receiving the assignment to complete it.** Once finished, email a link to your repository to [careers@cloudfide.com](mailto:careers@cloudfide.com).
 
 ## Task
 
